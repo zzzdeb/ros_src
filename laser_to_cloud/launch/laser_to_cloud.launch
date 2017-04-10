@@ -1,0 +1,6 @@
+<?xml version = "1.0"?>
+<launch>
+    <node name ="laser_to_cloud" pkg="laser_to_cloud" type="laser_to_cloud">
+         <rosparam file="$(find laser_to_cloud)/config/parameter.yaml" command="load" />
+    </node>
+</launch>
