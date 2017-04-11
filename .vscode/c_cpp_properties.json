@@ -10,7 +10,7 @@
         },
         {
             "name": "Linux",
-            "includePath": ["/usr/include","/opt/ros/indigo/include"],
+            "includePath": ["/usr/include","/opt/ros/indigo/include","/opt/ros/kinetic/include"],
             "browse" : {
                 "limitSymbolsToIncludedHeaders" : true,
                 "databaseFilename" : ""
