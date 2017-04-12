@@ -7,17 +7,15 @@
 #include <pcl/point_cloud.h>
 #include <pcl_conversions/pcl_conversions.h>
 
-#include <string>
-#include <iostream>
 
 
-class ScanToCloud{
+class LaserToCloud{
 
     typedef pcl::PointXYZ           PointT;
     typedef pcl::PointCloud<PointT> PointCloudT;
 
     public:
-        ScanToCloud(ros::NodeHandle n) {
+        LaserToCloud(ros::NodeHandle n):nh(n) {
             ROS_INFO("LaserToCloud constructed");
             //invalid points are goint to be NaN (x<min || x>max)
             invalid_point_.x = std::numeric_limits<float>::quiet_NaN();
@@ -25,12 +23,10 @@ class ScanToCloud{
             invalid_point_.z = std::numeric_limits<float>::quiet_NaN();
             
             cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("laser_to_cloud",1);
-            //std::string scan_topic;
-            //std::cout<<nh.getParam("scan_topic", scan_topic)<<"aaaaaaaaaaaaaaaa";
-            scan_sub = nh.subscribe("front/scan", 1, &ScanToCloud::callback, this);
+            scan_sub = nh.subscribe("scan", 1, &LaserToCloud::callback, this);
         }
 
-        ~ScanToCloud(){
+        ~LaserToCloud(){
             ROS_INFO("LaserToCloud destructed");
         }
 
