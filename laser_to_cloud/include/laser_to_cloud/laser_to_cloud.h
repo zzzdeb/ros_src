@@ -15,7 +15,7 @@ class LaserToCloud{
     typedef pcl::PointCloud<PointT> PointCloudT;
 
     public:
-        LaserToCloud(ros::NodeHandle n):nh(n) {
+        LaserToCloud(ros::NodeHandle* n):nh(*n) {
             ROS_INFO("LaserToCloud constructed");
             //invalid points are goint to be NaN (x<min || x>max)
             invalid_point_.x = std::numeric_limits<float>::quiet_NaN();
