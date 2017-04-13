@@ -1,6 +1,7 @@
 <?xml version = "1.0"?>
 <launch>
     <node name ="my_laser_to_cloud" pkg="laser_to_cloud" type="laser_to_cloud">
-        <remap from="my_laser_to_cloud/scan" to="front/scan"/>
+        <remap from="my_laser_to_cloud/scan" to="/scan/pfodm30/front"/>
+        <remap from="my_laser_to_cloud/laser_to_cloud" to="ltoc"/>
     </node>
 </launch>

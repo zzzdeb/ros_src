@@ -41,7 +41,7 @@ public:
         return;
     }
     
-    // Do something with cloud.
+    
 
     scan_pub_.publish(cloud);
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
   
   ros::init(argc, argv, "my_scan_to_cloud");
   ros::NodeHandle n;
-  LaserScanToPointCloud lstopc(n);
+  LaserScanToPointCloud lasertopic(n);
   
   ros::spin();
   
