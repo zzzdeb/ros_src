@@ -1,0 +1,8 @@
+<?xml version = "1.0"?>
+  <launch>
+
+    <node pkg="scan_to_pcl_using_lg" type="scan_to_pcl" name="scan_to_pcl_using_lg"/>
+    <remap from="/my_cloud" to="cloud"/>
+    <remap from="base_scan" to="front_scan"/>
+    <remap from="tf_static" to="map"/>
+  </launch>

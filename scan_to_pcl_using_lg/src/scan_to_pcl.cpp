@@ -18,8 +18,8 @@ public:
 
   LaserScanToPointCloud(ros::NodeHandle n) : 
     n_(n),
-    laser_sub_(n_, "base_scan", 10),
-    laser_notifier_(laser_sub_,listener_, "base_link", 10)
+    laser_sub_(n_, "front/scan", 10),
+    laser_notifier_(laser_sub_,listener_, "front_laser", 10)
   {
     laser_notifier_.registerCallback(
       boost::bind(&LaserScanToPointCloud::scanCallback, this, _1));
@@ -33,7 +33,7 @@ public:
     try
     {
         projector_.transformLaserScanToPointCloud(
-          "base_link",*scan_in, cloud,listener_);
+          "map",*scan_in, cloud,listener_);
     }
     catch (tf::TransformException& e)
     {
@@ -51,7 +51,7 @@ public:
 int main(int argc, char** argv)
 {
   
-  ros::init(argc, argv, "my_scan_to_cloud");
+  ros::init(argc, argv, "scan_to_cloud");
   ros::NodeHandle n;
   LaserScanToPointCloud lasertopic(n);
   
