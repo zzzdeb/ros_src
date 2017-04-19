@@ -1,3 +1,6 @@
+#ifndef _ANGLE_SEGMENT_2D_
+#define _ANGLE_SEGMENT_2D_
+
 #include <ros/ros.h>
 #include <ros/console.h>
 
@@ -17,15 +20,19 @@ class AngleSegment2d{
     typedef sensor_msgs::LaserScan LaserScan;
 
     public:
-        AngleSegment2d(ros::NodeHandle* n);
+        AngleSegment2d(ros::NodeHandle* n, int angle_threshold);
 
         ~AngleSegment2d(){
             ROS_INFO("AngleSegment2d destructed");
         }
 
+
+        bool angle_test(const LaserScan::Ptr& scan_msg, unsigned int i);
         void scan_callback(const LaserScan::ConstPtr& scan_msg);
 
-    protected:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    protected:
+        int angle_threshold;
+
         ros::NodeHandle nh_;
         ros::Publisher scan_pub;
         ros::Subscriber scan_sub;
@@ -33,3 +40,5 @@ class AngleSegment2d{
 };
 
 } // anglesegment namespace
+
+#endif

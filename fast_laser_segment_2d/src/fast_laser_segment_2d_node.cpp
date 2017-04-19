@@ -4,7 +4,8 @@ int main(int c, char** v){
     
     ros::init(c, v, "fast_angle_segment");
     ros::NodeHandle nh("~");
-    anglesegment::AngleSegment2d segmentation(&nh);
+    int angle_threshold = 10;
+    anglesegment::AngleSegment2d segmentation(&nh, angle_threshold);
     ros::spin();
     return 0;
 }
