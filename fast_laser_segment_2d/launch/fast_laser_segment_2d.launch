@@ -1,0 +1,7 @@
+<?xml version = "1.0"?>
+<launch>
+    <node name ="segmentation_test" pkg="fast_laser_segment_2d" type="fast_laser_segment_2d_node">
+        <remap from="segmentation_test/scan" to="/scan/front"/>
+        <remap from="segmentation_test/laser_to_cloud" to="ltoc"/>
+    </node>
+</launch>

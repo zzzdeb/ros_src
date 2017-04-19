@@ -14,22 +14,22 @@ class AngleSegment2d{
     typedef pcl::PointXYZ           PointT;
     typedef pcl::PointCloud<PointT> PointCloudT;
 
+    typedef sensor_msgs::LaserScan LaserScan;
+
     public:
-        AngleSegment2d(ros::NodeHandle* n); 
+        AngleSegment2d(ros::NodeHandle* n);
 
         ~AngleSegment2d(){
             ROS_INFO("AngleSegment2d destructed");
         }
 
-        void callback(const sensor_msgs::LaserScan::ConstPtr& scan_msg);
-        
+        void scan_callback(const LaserScan::ConstPtr& scan_msg);
 
-    protected:
+    protected:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
         ros::NodeHandle nh_;
-        ros::Publisher cloud_pub;
+        ros::Publisher scan_pub;
         ros::Subscriber scan_sub;
 
-        PointT invalid_point_;
 };
 
 } // anglesegment namespace
