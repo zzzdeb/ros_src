@@ -20,7 +20,7 @@ void AngleSegment2d::callback(const sensor_msgs::LaserScan::ConstPtr& scan_msg)
             cloud->points.resize(scan_msg->ranges.size());
             for (unsigned int i = 0; i < scan_msg->ranges.size(); ++i)
             {
-                PointT& p = cloud->points[i];­­­­­
+                PointT& p = cloud->points[i];
                 float range = scan_msg->ranges[i];
                 if (range > scan_msg->range_min && range < scan_msg->range_max)
                 {
