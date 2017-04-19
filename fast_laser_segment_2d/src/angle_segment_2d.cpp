@@ -11,7 +11,7 @@ AngleSegment2d::AngleSegment2d(ros::NodeHandle* n):nh_(*n){
             invalid_point_.z = std::numeric_limits<float>::quiet_NaN();
             
             cloud_pub = nh_.advertise<sensor_msgs::PointCloud2>("laser_to_cloud",1);
-            scan_sub = nh_.subscribe("scan", 1, &LaserToCloud::callback, this);
+            scan_sub = nh_.subscribe("scan", 1, &AngleSegment2d::callback, this);
         }
 void AngleSegment2d::callback(const sensor_msgs::LaserScan::ConstPtr& scan_msg)
         {
