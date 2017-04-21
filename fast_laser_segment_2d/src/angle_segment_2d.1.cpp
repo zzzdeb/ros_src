@@ -1,5 +1,9 @@
 #include <angle_segment_2d/angle_segment_2d.h>
 #include <cmath>
+#include <vector>
+#include <queue>
+
+using namespace std;
 
 namespace anglesegment{
 
@@ -17,7 +21,10 @@ AngleSegment2d::AngleSegment2d(ros::NodeHandle* n, int angle_threshold):nh_(*n),
 void AngleSegment2d::scan_callback(const sensor_msgs::LaserScan::ConstPtr& scan_msg)
         {
             LaserScan::Ptr output(new LaserScan(*scan_msg));
-            int label = 1;
+            vector<vector<int>> labels = angle_segment_2d(output);
+            
+            publish_elements()
+            
             int factor = 10;
             output->intensities[0] = factor;
             for (unsigned int i = 1; i < output->ranges.size(); ++i)
@@ -38,6 +45,34 @@ void AngleSegment2d::scan_callback(const sensor_msgs::LaserScan::ConstPtr& scan_
             ROS_INFO("label max: %i", label);
             scan_pub.publish(output);
         }
+
+vector<vector<int>> AngleSegment2d::angle_segment_2d(const LaserScan::Ptr& scan_msg)
+{
+    vector<vector<int>> output;
+    vector<int> labels(scan_msg->ranges.size());
+    int label = 1;
+    for (unsigned int i=1; i<labels.size(); i++) // only one loop because of one laser scan;
+    {
+        if (labels[i]==0){
+            output.push_back(label_component_bfs(i, label, labels));
+            label++;
+        }
+    }
+    
+}
+
+vector<int> AngleSegment2d::label_component_bfs(int i, int label, vector<int>& labels)
+{
+    queue qu;
+    qu.push_back(i);
+    while (!qu.empty())
+    {
+        labels[i] = qu.front();
+        //for neighboars
+        if angle_test(scan_msg, i)
+        qu.pop();
+    }
+}
 
 bool AngleSegment2d::angle_test(const LaserScan::Ptr& scan_msg, unsigned int i)
 {
