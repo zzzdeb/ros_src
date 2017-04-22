@@ -48,7 +48,6 @@ void AngleSegment2dPub::scan_callback(const sensor_msgs::LaserScan::ConstPtr& sc
                 for (int j=0; j<obj->ranges.size(); j++)
                     obj->ranges[j]=scan_msg_->ranges[(*labels)[i][j]];
                 segmented_scans.push_back(obj);
-                ROS_INFO("segmented_scans: %i", segmented_scans.size());
             }
             publish_scans();
             ROS_INFO("%i segmentation", labels->size());
@@ -86,8 +85,9 @@ void AngleSegment2dPub::angle_segment_2d(boost::shared_ptr<vector<vector<int> > 
     {
         if (labels[i]==0){
             //ROS_INFO("angle_segment_2d");
-            output->push_back(label_component_bfs(i, label, labels));
-            
+            vector<int> temp = label_component_bfs(i, label, labels);
+            if (temp.size()>5)
+                output->push_back(temp);
             label++;
         }
     }
