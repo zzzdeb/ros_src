@@ -12,42 +12,44 @@
 
 #include <vector>
 using namespace std;
-namespace anglesegment{
+namespace anglesegment
+{
 
-class AngleSegment2dPub{
+class AngleSegment2dPub
+{
 
-    typedef pcl::PointXYZ           PointT;
+    typedef pcl::PointXYZ PointT;
     typedef pcl::PointCloud<PointT> PointCloudT;
-
+    // typedef boost::shared_ptr<vector<vector<int> > >
+    //typedef boost::shared_ptr<vector<vector<int> >
     typedef sensor_msgs::LaserScan LaserScan;
 
-    public:
-        AngleSegment2dPub(ros::NodeHandle* n, int angle_threshold);
+  public:
+    AngleSegment2dPub(ros::NodeHandle *n, int angle_threshold);
 
-        ~AngleSegment2dPub(){
-            ROS_INFO("AngleSegment2dPub destructed");
-        }
+    ~AngleSegment2dPub()
+    {
+        ROS_INFO("AngleSegment2dPub destructed");
+    }
 
+    void scan_callback(const LaserScan::ConstPtr &scan_msg);
+    void publish_scans();
+    void angle_segment_2d(const boost::shared_ptr<vector<vector<int>>> &output);
+    std::vector<int> label_component_bfs(int i, int label, std::vector<int> &labels);
+    bool angle_test(unsigned int i);
 
-        void scan_callback(const LaserScan::ConstPtr& scan_msg);
-        void publish_scans();
-        void angle_segment_2d(boost::shared_ptr<vector<vector<int> > >& output);
-        std::vector<int> label_component_bfs(int i, int label, std::vector<int>& labels);
-        bool angle_test(unsigned int i);
+  protected:
+    int angle_threshold;
+    std::vector<LaserScan::Ptr> segmented_scans;
 
-    protected:
-        int angle_threshold;
-        std::vector<LaserScan::Ptr> segmented_scans;
+    ros::NodeHandle nh_;
+    ros::Subscriber scan_sub;
 
-        ros::NodeHandle nh_;
-        ros::Subscriber scan_sub;
+    std::vector<ros::Publisher> scan_pubs;
 
-        std::vector<ros::Publisher> scan_pubs;
-
-        sensor_msgs::LaserScan::ConstPtr scan_msg_;
-        LaserScan::Ptr leer_scan;
+    sensor_msgs::LaserScan::ConstPtr scan_msg_;
+    LaserScan::Ptr leer_scan;
 };
-
 }
 
 #endif
