@@ -34,7 +34,7 @@ void AngleSegment2d::scan_callback(const sensor_msgs::LaserScan::ConstPtr& scan_
                     }
                 }
                 else
-                    output->intensities[i] = 0;
+                    output->intensities[i] = 5;
             }
             ROS_INFO("label max: %i", label);
             scan_pub.publish(output);
@@ -43,7 +43,7 @@ void AngleSegment2d::scan_callback(const sensor_msgs::LaserScan::ConstPtr& scan_
 bool AngleSegment2d::angle_test(const LaserScan::Ptr& scan_msg, unsigned int i)
 {
     float rmax, rmin, alpha;
-    alpha = scan_msg->angle_increment*180/PI;
+    alpha = scan_msg->angle_increment; //radian
     if (scan_msg->ranges[i]>scan_msg->ranges[i-1]){
         rmax = scan_msg->ranges[i];
         rmin = scan_msg->ranges[i-1];
@@ -52,14 +52,13 @@ bool AngleSegment2d::angle_test(const LaserScan::Ptr& scan_msg, unsigned int i)
         rmax = scan_msg->ranges[i-1];
         rmin = scan_msg->ranges[i];
     }
-    float beta = 180*atan(rmin*sin(alpha)/(rmax-rmin*(cos(alpha))))/PI;
-    //ROS_INFO("rmin %f, rmax %f, alpha %f, beta %f", rmin, rmax, alpha, beta);
+    float artan = atan(rmin*sin(alpha)/(rmax-rmin*cos(alpha)));
+    float beta = 180*artan/PI;
+    //ROS_INFO("rmin %f, rmax %f, alpha %f, beta %f", rmin, rmax, alpha, beta);  
     return beta>angle_threshold;
 }
 
-
-
-} // anglesegment namespace
+} // anglesegment namespace                                   
 
 //   /**
 //    * @brief      Calculates the labels running over the whole image.

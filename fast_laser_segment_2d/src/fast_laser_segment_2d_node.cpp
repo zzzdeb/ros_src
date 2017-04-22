@@ -1,4 +1,5 @@
 #include "angle_segment_2d/angle_segment_2d.h"
+#include <ros/ros.h>
 
 int main(int c, char** v){
     
