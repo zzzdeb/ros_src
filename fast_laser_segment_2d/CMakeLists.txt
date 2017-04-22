@@ -13,6 +13,8 @@ set( ROS_CXX_DEPENDENCIES
   pcl_ros
   pcl_conversions)
 
+set( CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+
 find_package(catkin REQUIRED COMPONENTS
   ${ROS_CXX_DEPENDENCIES}
 )
@@ -40,7 +42,8 @@ include_directories(
 
 add_executable(${PROJECT_NAME}_node 
               src/fast_laser_segment_2d_node.cpp
-              src/angle_segment_2d.cpp)
+              src/angle_segment_2d_viz.cpp
+              src/angle_segment_2d_pub.cpp)
 
 
 target_link_libraries(${PROJECT_NAME}_node

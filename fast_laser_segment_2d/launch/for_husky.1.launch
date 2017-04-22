@@ -1,0 +1,10 @@
+<?xml version = "1.0"?>
+<launch>
+    <node name="segmentation_test" pkg="fast_laser_segment_2d" type="fast_laser_segment_2d_node">
+        <remap from="segmentation_test/scan" to="/front/scan"/>
+        <remap from="segmentation_test/laser_to_cloud" to="ltoc"/>
+    </node>
+    <node name="husky_data" pkg="rosbag" type="play"
+        args="/home/upns/zzz/ba_ws/data/bags/2017-02-06-17-39-02.bag --clock -l">
+    </node>
+</launch>
