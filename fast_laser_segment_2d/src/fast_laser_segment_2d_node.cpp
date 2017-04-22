@@ -34,6 +34,6 @@ int main(int c, char** v){
         break;
     }
     ros::spin();
-    // delete nh_;
+    delete nh_pub, nh_viz;
     return 0;
 }
