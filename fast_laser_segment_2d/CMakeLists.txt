@@ -44,6 +44,7 @@ add_executable(${PROJECT_NAME}_node
               src/fast_laser_segment_2d_node.cpp
               src/angle_segment_2d_viz.cpp
               src/angle_segment_2d_pub.cpp)
+              #src/angle_segment_3d_viz.cpp)
 
 
 target_link_libraries(${PROJECT_NAME}_node

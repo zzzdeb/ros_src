@@ -1,4 +1,4 @@
-#include <angle_segment_2d/angle_segment_2d_viz.h>
+#include <angle_segment_3d/angle_segment_3d_viz.h>
 #include <cmath>
 
 namespace anglesegment
@@ -6,15 +6,15 @@ namespace anglesegment
 
 #define PI 3.14159265358979323846
 
-AngleSegment2dViz::AngleSegment2dViz(ros::NodeHandle *n, int angle_threshold) : nh_(*n), angle_threshold(angle_threshold)
+AngleSegment3dViz::AngleSegment3dViz(ros::NodeHandle *n, int angle_threshold) : nh_(*n), angle_threshold(angle_threshold)
 {
     ROS_INFO("LaserToCloud constructed");
-
+    // prev_scan_msg_ = new LaserScan;
     scan_pub = nh_.advertise<LaserScan>("/segmented_scan", 1);
-    scan_sub = nh_.subscribe("/hokuyo/scan/raw", 1, &AngleSegment2dViz::scan_callback, this);
+    scan_sub = nh_.subscribe("/hokuyo/scan/raw", 1, &AngleSegment3dViz::scan_callback, this);
 }
 
-void AngleSegment2dViz::scan_callback(const sensor_msgs::LaserScan::ConstPtr &scan_msg)
+void AngleSegment3dViz::scan_callback(const sensor_msgs::LaserScan::ConstPtr &scan_msg)
 {
     LaserScan::Ptr output(new LaserScan(*scan_msg));
     int label = 1;
@@ -32,7 +32,7 @@ void AngleSegment2dViz::scan_callback(const sensor_msgs::LaserScan::ConstPtr &sc
             {
                 if (i - current_label_begin > 5) //mindest punkte
                 {
-                    currentlabel = (i + current_label_begin)/2;
+                    currentlabel = factor*currentlabel;
                     label++;
                 }
                 else
@@ -47,10 +47,31 @@ void AngleSegment2dViz::scan_callback(const sensor_msgs::LaserScan::ConstPtr &sc
             output->intensities[i] = notanobject;
     }
     ROS_INFO("%i Object segmented", label);
+    prev_scan_msg_ = output;
     scan_pub.publish(output);
 }
 
-bool AngleSegment2dViz::angle_test(const LaserScan::Ptr &scan_msg, unsigned int i)
+bool AngleSegment3dViz::angle_test(const LaserScan::Ptr &scan_msg, unsigned int i)
+{
+    float rmax, rmin, alpha;
+    alpha = scan_msg->angle_increment; //radian
+    if (scan_msg->ranges[i] > scan_msg->ranges[i - 1])
+    {
+        rmax = scan_msg->ranges[i];
+        rmin = scan_msg->ranges[i - 1];
+    }
+    else
+    {
+        rmax = scan_msg->ranges[i - 1];
+        rmin = scan_msg->ranges[i];
+    }
+    float artan = atan(rmin * sin(alpha) / (rmax - rmin * cos(alpha)));
+    float beta = 180 * artan / PI;
+    //ROS_INFO("rmin %f, rmax %f, alpha %f, beta %f", rmin, rmax, alpha, beta);
+    return beta > angle_threshold;
+}
+
+bool AngleSegment3dViz::angle_test(const LaserScan::Ptr &scan_msg, unsigned int i, int alpha)
 {
     float rmax, rmin, alpha;
     alpha = scan_msg->angle_increment; //radian

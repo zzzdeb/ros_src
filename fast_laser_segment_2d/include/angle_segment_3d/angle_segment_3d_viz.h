@@ -1,5 +1,5 @@
-#ifndef _ANGLE_SEGMENT_2D_VIZ_
-#define _ANGLE_SEGMENT_2D_VIZ_
+#ifndef _ANGLE_SEGMENT_3D_VIZ_
+#define _ANGLE_SEGMENT_3D_VIZ_
 
 #include <ros/ros.h>
 #include <ros/console.h>
@@ -13,20 +13,17 @@
 namespace anglesegment
 {
 
-class AngleSegment2dViz
+class AngleSegment3dViz
 {
-
-    typedef pcl::PointXYZ PointT;
-    typedef pcl::PointCloud<PointT> PointCloudT;
 
     typedef sensor_msgs::LaserScan LaserScan;
 
   public:
-    AngleSegment2dViz(ros::NodeHandle *n, int angle_threshold);
+    AngleSegment3dViz(ros::NodeHandle *n, int angle_threshold);
 
-    ~AngleSegment2dViz()
+    ~AngleSegment3dViz()
     {
-        ROS_INFO("AngleSegment2dViz destructed");
+        ROS_INFO("AngleSegment3dViz destructed");
     }
 
     bool angle_test(const LaserScan::Ptr &scan_msg, unsigned int i);
@@ -40,6 +37,7 @@ class AngleSegment2dViz
     ros::Subscriber scan_sub;
 
     sensor_msgs::LaserScan::ConstPtr prev_scan_msg_;
+    LaserScan::Ptr leer_scan;
 };
 
 } // anglesegment namespace

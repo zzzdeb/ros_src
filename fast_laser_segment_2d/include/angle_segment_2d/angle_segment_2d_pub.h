@@ -17,9 +17,7 @@ namespace anglesegment
 
 class AngleSegment2dPub
 {
-
-  typedef pcl::PointXYZ PointT;
-  typedef pcl::PointCloud<PointT> PointCloudT;
+protected:
   // typedef boost::shared_ptr<vector<vector<int> > >
   typedef boost::shared_ptr<vector<int>> ViPtr;
   typedef sensor_msgs::LaserScan LaserScan;
