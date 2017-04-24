@@ -5,7 +5,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/zzz/ros/ba_ws/devel/lib/fast_laser_segment_2d/fast_laser_segment_2d_node",
+            "program": "/home/zzz/ros/ba_ws/src/ros_src/testproject/a.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
@@ -39,7 +39,7 @@
             "name": "C++ Attach",
             "type": "cppdbg",
             "request": "attach",
-            "program": "enter program name, for example ${workspaceRoot}/a.out",
+            "program": "/home/zzz/ros/ba_ws/src/ros_src/testproject/a.out",
             "processId": "${command:pickProcess}",
             "linux": {
                 "MIMode": "gdb",
