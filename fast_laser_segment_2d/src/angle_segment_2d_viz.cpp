@@ -11,7 +11,7 @@ AngleSegment2dViz::AngleSegment2dViz(ros::NodeHandle *n, int angle_threshold) : 
     ROS_INFO("LaserToCloud constructed");
 
     scan_pub = nh_.advertise<LaserScan>("/segmented_scan", 1);
-    scan_sub = nh_.subscribe("/hokuyo/scan/raw", 1, &AngleSegment2dViz::scan_callback, this);
+    scan_sub = nh_.subscribe("/front/scan", 1, &AngleSegment2dViz::scan_callback, this);
 }
 
 void AngleSegment2dViz::scan_callback(const sensor_msgs::LaserScan::ConstPtr &scan_msg)

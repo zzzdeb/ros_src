@@ -16,7 +16,7 @@ typedef boost::shared_ptr<vector<int>> ViPtr;
 AngleSegment2dPub::AngleSegment2dPub(ros::NodeHandle *n, int angle_threshold) : nh_(*n), angle_threshold(angle_threshold)
 {
 
-    scan_sub = nh_.subscribe("/hokuyo/scan/raw", 1, &AngleSegment2dPub::scan_callback, this);
+    scan_sub = nh_.subscribe("/front/scan", 1, &AngleSegment2dPub::scan_callback, this);
 
     leer_scan = LaserScan::Ptr(new LaserScan());
     scan_msg_ = LaserScan::ConstPtr(new LaserScan());
@@ -41,7 +41,7 @@ void AngleSegment2dPub::scan_callback(const LaserScan::ConstPtr &scan_msg)
         obj->angle_max = scan_msg_->angle_max+scan_msg_->angle_increment*(labelptr->at(i)->back());
         obj->angle_increment = scan_msg_->angle_increment;
         obj->time_increment = scan_msg_->time_increment;
-        obj->scan_time = scan_msg_->scan_time;
+        obj->scan_time = scan_msg_->scan_time; //must be changed
         obj->range_min = scan_msg_->range_min;
         obj->range_max = scan_msg_->range_max;
         obj->ranges.resize(labelptr->at(i)->size());

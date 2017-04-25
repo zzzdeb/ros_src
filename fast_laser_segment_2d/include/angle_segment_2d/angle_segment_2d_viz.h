@@ -38,8 +38,6 @@ class AngleSegment2dViz
     ros::NodeHandle nh_;
     ros::Publisher scan_pub;
     ros::Subscriber scan_sub;
-
-    sensor_msgs::LaserScan::ConstPtr prev_scan_msg_;
 };
 
 } // anglesegment namespace
