@@ -19,6 +19,58 @@ void AngleSegment3dViz::scan_callback(const sensor_msgs::LaserScan::ConstPtr &sc
     scan3d.push(scan_msg);
 }
 
+
+    tf2_ros::Buffer tfBuffer;
+    tf2_ros::TransformListener tfListener(tfBuffer);
+    geometry_msgs::TransformStamped transformStamped;
+    try
+    {
+        ros::Time now = ros::Time::now();
+        // transformStamped = tfBuffer.lookupTransform("platform_laser_rotation/base/rotation_center", "platform_laser_rotation/carrier/laser_mount", now,
+        //                                             ros::Duration(3.0));
+        transformStamped.header = msg->header;
+        transformStamped.header.frame_id = "platform_laser_rotation/base/rotation_center";
+        transformStamped.child_frame_id = "platform_laser_rotation/carrier/laser_mount";
+        transformStamped.transform.translation.x = -0.043;
+        transformStamped.transform.translation.y = 0.066;
+        transformStamped.transform.translation.z = 0.130;
+        
+        double dur = (msg->header.stamp-first_scan_time).toSec();
+        tf2::Quaternion rot((dur/0.025)*0.0785, 0, -1.570);
+        transformStamped.transform.rotation.x = rot.x();
+        transformStamped.transform.rotation.y = rot.y();
+        transformStamped.transform.rotation.z = rot.z();
+        transformStamped.transform.rotation.w = rot.w();
+    }
+    catch (tf2::TransformException &ex)
+    {
+        ROS_WARN("Could NOT transform a to b: %s", ex.what());
+    }
+    for (unsigned int i = 0; i < msg->ranges.size(); ++i)
+    {
+        RichPoint p;
+        Eigen::Vector3d p_in;
+        Eigen::Vector3d p_out;
+        float range = msg->ranges[i];
+        if (range > msg->range_min && range < msg->range_max)
+        {
+            float angle = msg->angle_min + i * msg->angle_increment;
+
+            p_in.x() = range * sin(angle);
+            p_in.y() = range * cos(angle);
+            p_in.z() = 0;
+
+            tf2::doTransform(p_in, p_out, transformStamped);
+            p.AsEigenVector() = p_out.cast<float>();
+            cloud.push_back(p);
+        }
+        // else
+        //     p = invalid_point_;
+    }
+
+    return make_shared<Cloud>(cloud);
+
+
 bool AngleSegment3dViz::angle_test(const LaserScan::Ptr &scan_msg, unsigned int i)
 {
     float rmax, rmin, alpha;
