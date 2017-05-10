@@ -4,6 +4,8 @@
 #include <ros/ros.h>
 #include <ros/console.h>
 
+#include <queue>
+
 #include <sensor_msgs/LaserScan.h>
 #include <sensor_msgs/PointCloud2.h>
 
@@ -16,7 +18,7 @@ namespace anglesegment
 class AngleSegment3dViz
 {
 
-    typedef sensor_msgs::LaserScan LaserScan;
+    typedef sensor_msgs::LaserScan LaserT;
 
   public:
     AngleSegment3dViz(ros::NodeHandle *n, int angle_threshold);
@@ -36,6 +38,7 @@ class AngleSegment3dViz
     ros::Publisher scan_pub;
     ros::Subscriber scan_sub;
 
+    queue<LaserT::Ptr> scan3d;
     sensor_msgs::LaserScan::ConstPtr prev_scan_msg_;
     LaserScan::Ptr leer_scan;
 };

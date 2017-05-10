@@ -16,39 +16,7 @@ AngleSegment3dViz::AngleSegment3dViz(ros::NodeHandle *n, int angle_threshold) : 
 
 void AngleSegment3dViz::scan_callback(const sensor_msgs::LaserScan::ConstPtr &scan_msg)
 {
-    LaserScan::Ptr output(new LaserScan(*scan_msg));
-    int label = 1;
-    int current_label_begin = 0;
-    int factor = 30;
-    int notanobject = 1;
-    int currentlabel;
-    output->intensities[0] = factor;
-    for (unsigned int i = 1; i < output->ranges.size(); ++i)
-    {
-        float range = output->ranges[i];
-        if (range > scan_msg->range_min && range < scan_msg->range_max)
-        {
-            if (!angle_test(output, i))
-            {
-                if (i - current_label_begin > 5) //mindest punkte
-                {
-                    currentlabel = factor*currentlabel;
-                    label++;
-                }
-                else
-                    currentlabel = notanobject;
-                for (int j = current_label_begin; j < i; j++)
-                    if (output->intensities[j] != notanobject)
-                        output->intensities[j] = currentlabel;
-                current_label_begin = i;
-            }
-        }
-        else
-            output->intensities[i] = notanobject;
-    }
-    ROS_INFO("%i Object segmented", label);
-    prev_scan_msg_ = output;
-    scan_pub.publish(output);
+    scan3d.push(scan_msg);
 }
 
 bool AngleSegment3dViz::angle_test(const LaserScan::Ptr &scan_msg, unsigned int i)
