@@ -1,0 +1,13 @@
+<launch>
+  <node type="laser_scan_assembler" pkg="laser_assembler" name="my_assembler">
+    <remap from="scan" to="/hokuyo/scan/raw"/>
+    <param name="max_scans" type="int" value="400" />
+    <param name="fixed_frame" type="string" value="platform_laser_rotation/base/rotation_center" />
+    <param name="/use_sim_time" type="bool" value="true"/>
+  </node>
+
+  <node type="laser_assembler_demo" pkg="laser_assembler_demo" name="my_cloud_publisher" output="screen">
+    <param name="/use_sim_time" type="bool" value="true"/>
+
+  </node>
+</launch>
