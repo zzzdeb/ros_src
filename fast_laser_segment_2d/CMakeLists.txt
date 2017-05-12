@@ -46,10 +46,16 @@ add_executable(${PROJECT_NAME}_node
               src/angle_segment_2d_pub.cpp)
               #src/angle_segment_3d_viz.cpp)
 
+add_executable(angle_segmenter_node 
+              src/angle_segmenter_node.cpp
+              )
+
 
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
 )
-
+target_link_libraries(angle_segmenter_node
+  ${catkin_LIBRARIES}
+)
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 

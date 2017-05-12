@@ -38,6 +38,8 @@
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "*.ipp": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "geometry": "cpp",
+        "core": "cpp"
     }
 }
