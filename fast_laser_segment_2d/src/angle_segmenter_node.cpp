@@ -2,8 +2,9 @@
 #include <ros/ros.h>
 #include <string>
 
-#include <pcl/range_image/range_image.h>
+#include <pcl/range_image/range_image_spherical.h>
 #include <pcl_conversions/pcl_conversions.h>
+#include <pcl/common/transforms.h>
 // #include <Eigen/
 
 // #include <pcl/
@@ -26,24 +27,26 @@ class RosAngleSegment
     {
         pcl::PointCloud<pcl::PointXYZI> cloud;
         pcl::fromROSMsg(input, cloud);
-        pcl::RangeImage image;
+        pcl::RangeImageSpherical image;
         float res_x = pcl::deg2rad(4.5);
-        float res_y = pcl::deg2rad(180.0 / 793.0); //falsch muss aus laser gelesen werden
+        float res_y = 0.004357821;
         // We now want to create a range image from the above point cloud, with a 1deg angular resolution
         float maxAngleWidth = (float)(360.0f * (M_PI / 180.0f));   // 360.0 degree in radians
         float maxAngleHeight = (float)(180.0f * (M_PI / 180.0f));  // 180.0 degree in radians
+        //Eigen::Affine3f sensorPose = (Eigen::Affine3f)Eigen::Translation3f(0.0f, 0.0f, 0.0f);
         Eigen::Affine3f sensorPose = (Eigen::Affine3f)Eigen::Translation3f(0.0f, 0.0f, 0.0f);
         pcl::RangeImage::CoordinateFrame coordinate_frame = pcl::RangeImage::LASER_FRAME;
         float noiseLevel = 0.00;
         float minRange = 0.0f;
         int borderSize = 1;
-
-        pcl::RangeImage rangeImage;
         image.createFromPointCloud(cloud, res_x, res_y, maxAngleWidth, maxAngleHeight,
                                         sensorPose, coordinate_frame, noiseLevel, minRange, borderSize);
-
+        //image.torWorldFrame
+        pcl::RangeImageSpherical transformed_image;
+        Eigen::Affine3f rotation = sensorPose.rotate(Eigen::AngleAxisf(1.5/180.0*M_PI, Eigen::Vector3f::UnitZ()));/// Rotation 
+        pcl::transformPointCloud(image, transformed_image, rotation);
         Cloud2 cloud2;
-        pcl::toROSMsg(image, cloud2);
+        pcl::toROSMsg(transformed_image, cloud2);
         cloud2.header = input.header;
         cloud_pub.publish(cloud2);
     }

@@ -10,7 +10,9 @@
 
 #include <pcl/point_cloud.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <pcl/range_image/range_image.h>
+#include <pcl/range_image/range_image_spherical.h>
+
+#include <opencv/cv.h>
 
 namespace anglesegment
 {
@@ -18,10 +20,10 @@ namespace anglesegment
 class AngleSegmenter
 {
 
-    typedef sensor_msgs::PointCloud2 PointT;
+    typedef sensor_msgs::PointCloud2 PointCloudT;
 
   public:
-    AngleSegmenter(pclcloud, int angle_threshold);
+    AngleSegmenter(const pcl::RangeImageSpherical& rcloud, int angle_threshold);
 
     ~AngleSegmenter()
     {
@@ -32,8 +34,8 @@ class AngleSegmenter
 
   protected:
     int angle_threshold;
-    pcl::RangeImage::Ptr rcloud;
-    vector<pclcloudptr> clouds;
+    pcl::RangeImageSpherical::Ptr rcloud;
+    cv::Mat _label_image;
 };
 
 } // anglesegment namespace

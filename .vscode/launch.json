@@ -5,7 +5,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/zzz/ros/ba_ws/devel/lib/fast_laser_segment_2d/angle_segmenter_node",
+            "program": "/home/upns/zzz/ba_ws/devel/lib/fast_laser_segment_2d/angle_segmenter_node",
             "args": ["use_sim_time:=true"],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
